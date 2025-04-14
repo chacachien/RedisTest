@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
 using BaseRedis;
+using StackExchange.Redis;
 
 namespace Red;
-using StackExchange.Redis;
+
 
 class Program
 {
@@ -16,28 +17,54 @@ class Program
             eventArgs.Cancel = true; // Prevent abrupt termination
             cts.Cancel();
         };
-        var producerTask = Task.Run(() => RunProducerAsync(cts.Token));
-
-        await Task.WhenAll(producerTask);
-        Console.WriteLine("Shutdown Complete.");
+        try
+        {
+            var producerTask = RunProducerAsync(cts.Token);
+            await producerTask;
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("[Main] Producer task cancelled gracefully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Main] Unexpected error: {ex.Message}");
+        }
+        finally
+        {
+            Console.WriteLine("Shutdown Complete.");
+        }
     }
 
     static async Task RunProducerAsync(CancellationToken token)
     {
-
         string streamKey = "mystream";
         string consumerGroup = "mygroup";
         string consumerName = "consumer1";
         var producer = new RedisStreamProducer(streamKey);
-        while (!token.IsCancellationRequested)
+        try
         {
-            Console.WriteLine($"[Producer] Sending account update at {DateTime.Now}");
-            var account = AccountGenerator.GenerateRandomAccount();
-            var jsonString = account.ToDictionary();
-            await producer.AddMessageAsync(jsonString);
-            await Task.Delay(1000, token);
+            while (!token.IsCancellationRequested)
+            {
+                Console.WriteLine($"[Producer] Sending account update at {DateTime.Now}");
+                var account = AccountGenerator.GenerateRandomAccount();
+                await producer.AddMessageAsync(account);
+                await Task.Delay(1000, token); // Respect cancellation during delay
+            }
         }
-        Console.WriteLine("[Producer] Stopped.");    
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("[Producer] Producer operation cancelled gracefully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Producer] Error in producer: {ex.Message}");
+            throw; // Re-throw to maintain error visibility
+        }
+        finally
+        {
+            Console.WriteLine("[Producer] Stopped.");
+        }
     }
 }
 
@@ -48,16 +75,11 @@ public class RedisStreamProducer : RedisConnectionBase
     {
     }
     
-    public async Task AddMessageAsync(Dictionary<string, string> message)
+    public async Task AddMessageAsync(Account account)
     {
-        var entries = new NameValueEntry[message.Count];
-        int i = 0;
-        foreach (var kvp in message)
-        {
-            entries[i++] = new NameValueEntry(kvp.Key, kvp.Value);
-        }
-
-        await _db.StreamAddAsync(_streamKey, entries);
+        var json = JsonSerializer.Serialize(account);
+        var entry = new NameValueEntry("data", json);
+        await _db.StreamAddAsync(_streamKey, new[] { entry });
     }
 }
     

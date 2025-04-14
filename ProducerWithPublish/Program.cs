@@ -31,7 +31,7 @@ class Program
             Console.WriteLine($"[Producer] Sending account update at {DateTime.Now}");
             var account = AccountGenerator.GenerateRandomAccount();
             var jsonString = account.ToDictionary();
-            await producer.AddMessageAsync(jsonString);
+            await producer.AddMessageAsync(account);
             publisher.PublishAsync(myChannel, 1);
             await Task.Delay(1000, cts.Token);
         }

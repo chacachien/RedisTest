@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/Users/phatnguyen/RiderProjects/Red/ProducerWithPublish/ProducerWithPublish.csproj": {}
+    "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\ProducerWithPublish\\ProducerWithPublish.csproj": {}
   },
   "projects": {
-    "/Users/phatnguyen/RiderProjects/Red/BaseRedis/BaseRedis.csproj": {
+    "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/phatnguyen/RiderProjects/Red/BaseRedis/BaseRedis.csproj",
+        "projectUniqueName": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj",
         "projectName": "BaseRedis",
-        "projectPath": "/Users/phatnguyen/RiderProjects/Red/BaseRedis/BaseRedis.csproj",
-        "packagesPath": "/Users/phatnguyen/.nuget/packages/",
-        "outputPath": "/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/",
+        "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj",
+        "packagesPath": "C:\\Users\\phat\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/phatnguyen/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\phat\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,12 +39,25 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "NRedisStack": {
+              "target": "Package",
+              "version": "[0.13.2, )"
+            },
+            "Redis.OM": {
+              "target": "Package",
+              "version": "[0.8.0, )"
+            },
             "StackExchange.Redis": {
               "target": "Package",
               "version": "[2.8.31, )"
@@ -59,34 +79,41 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/phatnguyen/RiderProjects/Red/Consumer/Consumer.csproj": {
+    "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Consumer\\Consumer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/phatnguyen/RiderProjects/Red/Consumer/Consumer.csproj",
+        "projectUniqueName": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Consumer\\Consumer.csproj",
         "projectName": "Consumer",
-        "projectPath": "/Users/phatnguyen/RiderProjects/Red/Consumer/Consumer.csproj",
-        "packagesPath": "/Users/phatnguyen/.nuget/packages/",
-        "outputPath": "/Users/phatnguyen/RiderProjects/Red/Consumer/obj/",
+        "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Consumer\\Consumer.csproj",
+        "packagesPath": "C:\\Users\\phat\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Consumer\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/phatnguyen/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\phat\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/phatnguyen/RiderProjects/Red/BaseRedis/BaseRedis.csproj": {
-                "projectPath": "/Users/phatnguyen/RiderProjects/Red/BaseRedis/BaseRedis.csproj"
+              "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj": {
+                "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj"
               }
             }
           }
@@ -95,6 +122,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -122,37 +154,44 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/phatnguyen/RiderProjects/Red/ProducerWithPublish/ProducerWithPublish.csproj": {
+    "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\ProducerWithPublish\\ProducerWithPublish.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/phatnguyen/RiderProjects/Red/ProducerWithPublish/ProducerWithPublish.csproj",
+        "projectUniqueName": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\ProducerWithPublish\\ProducerWithPublish.csproj",
         "projectName": "ProducerWithPublish",
-        "projectPath": "/Users/phatnguyen/RiderProjects/Red/ProducerWithPublish/ProducerWithPublish.csproj",
-        "packagesPath": "/Users/phatnguyen/.nuget/packages/",
-        "outputPath": "/Users/phatnguyen/RiderProjects/Red/ProducerWithPublish/obj/",
+        "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\ProducerWithPublish\\ProducerWithPublish.csproj",
+        "packagesPath": "C:\\Users\\phat\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\ProducerWithPublish\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/phatnguyen/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\phat\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/phatnguyen/RiderProjects/Red/Consumer/Consumer.csproj": {
-                "projectPath": "/Users/phatnguyen/RiderProjects/Red/Consumer/Consumer.csproj"
+              "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Consumer\\Consumer.csproj": {
+                "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Consumer\\Consumer.csproj"
               },
-              "/Users/phatnguyen/RiderProjects/Red/Red/Red.csproj": {
-                "projectPath": "/Users/phatnguyen/RiderProjects/Red/Red/Red.csproj"
+              "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Red\\Red.csproj": {
+                "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Red\\Red.csproj"
               }
             }
           }
@@ -161,6 +200,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -182,34 +226,41 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/phatnguyen/RiderProjects/Red/Red/Red.csproj": {
+    "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Red\\Red.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/phatnguyen/RiderProjects/Red/Red/Red.csproj",
+        "projectUniqueName": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Red\\Red.csproj",
         "projectName": "Red",
-        "projectPath": "/Users/phatnguyen/RiderProjects/Red/Red/Red.csproj",
-        "packagesPath": "/Users/phatnguyen/.nuget/packages/",
-        "outputPath": "/Users/phatnguyen/RiderProjects/Red/Red/obj/",
+        "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Red\\Red.csproj",
+        "packagesPath": "C:\\Users\\phat\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Red\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/phatnguyen/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\phat\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/phatnguyen/RiderProjects/Red/BaseRedis/BaseRedis.csproj": {
-                "projectPath": "/Users/phatnguyen/RiderProjects/Red/BaseRedis/BaseRedis.csproj"
+              "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj": {
+                "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj"
               }
             }
           }
@@ -218,6 +269,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -245,7 +301,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

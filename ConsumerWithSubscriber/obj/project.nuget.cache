@@ -1,13 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "TqsXjcBPtHeV3Jp9NSn2v/jeaFk8vUzcwApJKoSOKO3lFWOUPvngNj9KyRePbi/KO+yr2CRt6Xxt+8IgZOsfkQ==",
+  "dgSpecHash": "d89uxkA2nyA=",
   "success": true,
-  "projectFilePath": "/Users/phatnguyen/RiderProjects/Red/ConsumerWithSubscriber/ConsumerWithSubscriber.csproj",
+  "projectFilePath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\ConsumerWithSubscriber\\ConsumerWithSubscriber.csproj",
   "expectedPackageFiles": [
-    "/Users/phatnguyen/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.0/microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
-    "/Users/phatnguyen/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
-    "/Users/phatnguyen/.nuget/packages/stackexchange.redis/2.8.31/stackexchange.redis.2.8.31.nupkg.sha512",
-    "/Users/phatnguyen/.nuget/packages/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg.sha512"
+    "C:\\Users\\phat\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\8.0.0\\microsoft.bcl.asyncinterfaces.8.0.0.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\nettopologysuite\\2.5.0\\nettopologysuite.2.5.0.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\nredisstack\\0.13.2\\nredisstack.0.13.2.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.8\\pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\redis.om\\0.8.0\\redis.om.0.8.0.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\stackexchange.redis\\2.8.31\\stackexchange.redis.2.8.31.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\ulid\\1.2.6\\ulid.1.2.6.nupkg.sha512"
   ],
   "logs": []
 }

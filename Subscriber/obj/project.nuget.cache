@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "b9pYp2LIxS6i8KGJ5hqQeeDE92tI8tHHpXAoeJXBt7E2MfMvUcRggifIk5s9Z/zUrEC9gcgugD8RM2tf+ARsaw==",
+  "dgSpecHash": "LqX4xO0xZ6k=",
   "success": true,
-  "projectFilePath": "/Users/phatnguyen/RiderProjects/Red/Subscriber/Subscriber.csproj",
+  "projectFilePath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\Subscriber\\Subscriber.csproj",
   "expectedPackageFiles": [
-    "/Users/phatnguyen/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.0/microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
-    "/Users/phatnguyen/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
-    "/Users/phatnguyen/.nuget/packages/stackexchange.redis/2.8.31/stackexchange.redis.2.8.31.nupkg.sha512",
-    "/Users/phatnguyen/.nuget/packages/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg.sha512"
+    "C:\\Users\\phat\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.8\\pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\stackexchange.redis\\2.8.31\\stackexchange.redis.2.8.31.nupkg.sha512",
+    "C:\\Users\\phat\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512"
   ],
   "logs": []
 }

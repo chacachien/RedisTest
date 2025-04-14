@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
+using NRedisStack;
 using StackExchange.Redis;
+
 namespace Consumer;
 using BaseRedis;
 
@@ -64,17 +66,17 @@ public class RedisStreamConsumer: RedisConnectionBase
     //         }
     //     }
     // }
-     public async Task StartListeningAsync(CancellationToken cancellationToken)
-    {
+    public async Task StartListeningAsync(CancellationToken cancellationToken)
+    {            try
+        {
         while (!cancellationToken.IsCancellationRequested)
         {
-            try
-            {
+
                 var result = await _db.ExecuteAsync(
                     "XREADGROUP",
                     "GROUP", _consumerGroup, _consumerName,
                     "COUNT", "1",
-                    "BLOCK", 33000, // Block for 5 seconds
+                    "BLOCK", 0,
                     "STREAMS", _streamKey, ">");
 
                 if (result != null && !result.IsNull)
@@ -90,24 +92,30 @@ public class RedisStreamConsumer: RedisConnectionBase
                             var entryId = (string)entryArray[0];
                             var values = (RedisResult[])entryArray[1];
 
-                            var messageData = new Dictionary<string, string>();
-                            for (int i = 0; i < values.Length; i += 2)
+                            var messageJson = values.FirstOrDefault(x => (string)x == "data").ToString();
+                            var jsonValue = values.Skip(1).FirstOrDefault()?.ToString();
+
+                            if (!string.IsNullOrWhiteSpace(jsonValue))
                             {
-                                messageData[(string)values[i]] = (string)values[i + 1];
+                                var account = JsonSerializer.Deserialize<Account>(jsonValue);
+                                Console.WriteLine(
+                                    $"Processed Account: ID={account.AccountId}, Balance={account.Balance}, Equity={account.Equity}, Margin={account.Margin}");
+                                // if (account != null)
+                                // {
+                                //     await redisCollection.InsertAsync(account);
+                                // }
                             }
 
-                            var account = ParseAccount(messageData);
-                            Console.WriteLine($"Processed Account: ID={account.AccountId}, Balance={account.Balance}, Equity={account.Equity}, Margin={account.Margin}");
                             await _db.StreamAcknowledgeAsync(_streamKey, _consumerGroup, entryId);
                         }
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error processing stream: {ex.Message}");
-                await Task.Delay(1000, cancellationToken); // Backoff on error
-            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error processing stream: {ex.Message}");
+            await Task.Delay(1000, cancellationToken);
         }
     }
 }
@@ -121,17 +129,24 @@ class Program
         string consumerGroup = "mygroup";
         string consumerName = "consumer1";
         var consumer = new RedisStreamConsumer(streamKey, consumerGroup, consumerName);
-        await consumer.InitializeAsync();
-        while (!token.IsCancellationRequested)
+        try
         {
+            await consumer.InitializeAsync();
             Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
-            
-            Dictionary<string, string> ParseResult(StreamEntry entry) => entry.Values.ToDictionary(x => x.Name.ToString(), x => x.Value.ToString());
-            var consumerTask = consumer.StartListeningAsync(token);
-
-            await Task.Delay(1000, token);
+            await consumer.StartListeningAsync(token);
         }
-        Console.WriteLine("[Consumer] Stopped.");
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("[Consumer] Consumer operation cancelled gracefully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Consumer] Error in consumer: {ex.Message}");
+        }
+        finally
+        {
+            Console.WriteLine("[Consumer] Stopped.");
+        }
     }
     static async Task Main(string[] args)
     {
@@ -139,19 +154,23 @@ class Program
         Console.CancelKeyPress += (sender, eventArgs) =>
         {
             Console.WriteLine("Ctrl+C pressed! Shutting down...");
-            eventArgs.Cancel = true; // Prevent abrupt termination
+            eventArgs.Cancel = true; 
+            cts.Cancel();
+        };
+        AppDomain.CurrentDomain.ProcessExit += (s, e) =>
+        {
+            Console.WriteLine("X clicked or process exiting... Cancelling token...");
             cts.Cancel();
         };
 
-        string streamKey = "mystream";
-        string consumerGroup = "mygroup";
-        string consumerName = "consumer1";
-        
-        var consumer = new RedisStreamConsumer(streamKey, consumerGroup, consumerName);
-        await consumer.InitializeAsync();
-        Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
-        await consumer.StartListeningAsync(cts.Token);
-        
-        Console.WriteLine("[Consumer] Stopped.");
+        try
+        {
+            var consumerTask = RunConsumerAsync(cts.Token);
+            await consumerTask;        }
+        catch (TaskCanceledException)
+        {
+            Console.WriteLine("[Main] Consumer task cancelled.");
+        }      
+        Console.WriteLine("Shutdown Complete.");
     }
 }

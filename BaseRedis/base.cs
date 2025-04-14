@@ -1,6 +1,9 @@
-﻿namespace BaseRedis;
+﻿using StackExchange.Redis;
+using Redis.OM;
+using Redis.OM.Modeling;
+namespace BaseRedis;
 
-using StackExchange.Redis;
+// using StackExchange.Redis;
 
 public class RedisConnectionBase
 {
@@ -13,6 +16,7 @@ public class RedisConnectionBase
     private readonly int port = 10701;
     private readonly string user = "default";
     private readonly string password = "eh3Td23NsIP5CQIkiHViFOhH9piG9OOk";
+    protected RedisConnectionProvider _provider;
 
     public RedisConnectionBase( string streamKey, string consumerGroup, string consumerName)
     {
@@ -21,23 +25,30 @@ public class RedisConnectionBase
             EndPoints = { { host, port } },
             User = user,
             Password = password,
-            AbortOnConnectFail = false
+            AbortOnConnectFail = false,
+            AsyncTimeout = 60000,
+            SyncTimeout = 10000,
+            ConnectTimeout = 60000,
         };
 
         _redis = ConnectionMultiplexer.Connect(config);
         _db = _redis.GetDatabase();
+        _provider = new RedisConnectionProvider(_redis);
+
         _streamKey = streamKey;
         _consumerGroup = consumerGroup;
         _consumerName = consumerName;
     }
 }
 
+[Document(StorageType = StorageType.Json, Prefixes = new[] {"account"})]
 public class Account
 {
-    public string AccountId { get; set; }
-    public decimal Balance { get; set; }
-    public decimal Equity { get; set; }
-    public decimal Margin { get; set; }
+    [RedisIdField]
+    public string AccountId { get; set; } = string.Empty;
+    public decimal Balance { get; set; } = decimal.Zero;
+    public decimal Equity { get; set; } = decimal.Zero;
+    public decimal Margin { get; set; } = decimal.Zero;
 }
 public static class AccountGenerator
 {
@@ -46,7 +57,7 @@ public static class AccountGenerator
     public static Account GenerateRandomAccount()
     {
         var balance = Math.Round((decimal)(_random.NextDouble() * 10000), 2);
-        var equity = Math.Round(balance + (decimal)(_random.NextDouble() * 1000 - 500), 2); // Equity can be +/- $500 of balance
+        var equity = Math.Round(balance + (decimal)(_random.NextDouble() * 1000 - 500), 2);
         var margin = Math.Round((decimal)(_random.NextDouble() * 1000), 2);
 
         return new Account
@@ -57,6 +68,7 @@ public static class AccountGenerator
             Margin = margin
         };
     }
+
     public static Dictionary<string, string> ToDictionary(this Account account)
     {
         return new Dictionary<string, string>
