@@ -26,9 +26,9 @@ public class RedisConnectionBase
             User = user,
             Password = password,
             AbortOnConnectFail = false,
-            AsyncTimeout = 60000,
-            SyncTimeout = 10000,
-            ConnectTimeout = 60000,
+            AsyncTimeout = 300000,
+            SyncTimeout = 300000,
+            ConnectTimeout = 300000,
         };
 
         _redis = ConnectionMultiplexer.Connect(config);

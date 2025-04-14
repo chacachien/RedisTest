@@ -15,8 +15,11 @@ class Program
         string consumerName = "consumer2";
         var consumer = new RedisStreamConsumer(streamKey, consumerGroup, consumerName);
         await consumer.InitializeAsync();
+        await consumer.RegisterConsumerAsync(); // Register with active consumers
         Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
-        await consumer.StartListeningAsync(token);
+        var listen= consumer.StartListeningAsync(token, 9999999);
+        var heart =  consumer.UpdateHeartbeatAsync(token);
+        await Task.WhenAll(listen, heart);
         Console.WriteLine("[Consumer] Stopped.");
     }
     static async Task Main(string[] args)

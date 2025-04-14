@@ -59,7 +59,7 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine($"[Producer] Error in producer: {ex.Message}");
-            throw; // Re-throw to maintain error visibility
+            throw; 
         }
         finally
         {
