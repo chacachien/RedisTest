@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "QEDGYsFJbDnF+kv0zlv2t0DRixmDOYNBnirsbLMKfLif28R3Co9xZAswNUr7jJk+leB3aTMMPjQ5UyPaQNZaLQ==",
+  "success": true,
+  "projectFilePath": "/Users/phatnguyen/RiderProjects/Red/ProducerWithPublish/ProducerWithPublish.csproj",
+  "expectedPackageFiles": [
+    "/Users/phatnguyen/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.0/microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "/Users/phatnguyen/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+    "/Users/phatnguyen/.nuget/packages/stackexchange.redis/2.8.31/stackexchange.redis.2.8.31.nupkg.sha512",
+    "/Users/phatnguyen/.nuget/packages/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

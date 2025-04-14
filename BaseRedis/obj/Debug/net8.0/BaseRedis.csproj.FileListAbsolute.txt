@@ -1,0 +1,12 @@
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/bin/Debug/net8.0/BaseRedis.deps.json
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/bin/Debug/net8.0/BaseRedis.dll
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/bin/Debug/net8.0/BaseRedis.pdb
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/BaseRedis.csproj.AssemblyReference.cache
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/BaseRedis.GeneratedMSBuildEditorConfig.editorconfig
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/BaseRedis.AssemblyInfoInputs.cache
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/BaseRedis.AssemblyInfo.cs
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/BaseRedis.csproj.CoreCompileInputs.cache
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/BaseRedis.dll
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/refint/BaseRedis.dll
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/BaseRedis.pdb
+/Users/phatnguyen/RiderProjects/Red/BaseRedis/obj/Debug/net8.0/ref/BaseRedis.dll
