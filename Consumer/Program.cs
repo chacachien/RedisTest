@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using NRedisStack;
 using StackExchange.Redis;
 
 namespace Consumer;
@@ -68,7 +67,6 @@ public class RedisStreamConsumer: RedisConnectionBase
     // }
     public async Task StartListeningAsync(CancellationToken cancellationToken, int fakeBreak)
     {            
-
         while (!cancellationToken.IsCancellationRequested)
         {
             try
@@ -164,93 +162,31 @@ public class RedisStreamConsumer: RedisConnectionBase
             await Task.Delay(10000, cancellationToken);
         }
     }
-    
-    public async Task MonitorPendingEntriesAsync(CancellationToken cancellationToken)
-    {
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            try
-            {
-                var activeConsumers = await _db.SetMembersAsync("active-consumers");
-
-
-                if (!activeConsumers.Any())
-                {
-                    Console.WriteLine("No other active consumers available for redistribution.");
-                    await Task.Delay(10000, cancellationToken);
-                    continue;
-                }
-
-                // Select a random consumer (or use a strategy like round-robin)
-                var targetConsumer = activeConsumers[new Random().Next(activeConsumers.Length)];
-
-                // Use XAUTOCLAIM to reassign messages to the target consumer
-                var reclaimed = await _db.StreamAutoClaimAsync(
-                    _streamKey, 
-                    _consumerGroup, 
-                    targetConsumer, // Assign to another consumer
-                    60000,         // Idle > 60 seconds 
-                    "0-0",         // Start from beginning
-                    10);           // Limit to 10 messages
-
-                if (!reclaimed.IsNull && reclaimed.ClaimedEntries.Any())
-                {
-                    foreach (var message in reclaimed.ClaimedEntries)
-                    {
-                        Console.WriteLine($"Reassigned message {message.Id} to {targetConsumer}");
-                        // Do NOT process or acknowledge here
-                        // The target consumer will process it via XREADGROUP
-                    }
-                }
-
-                await Task.Delay(10000, cancellationToken); // Check every 10 seconds
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in auto-claim monitoring: {ex.Message}");
-                await Task.Delay(5000, cancellationToken);
-            }
-        }
-    }
 }
 
 class Program
 {
     static async Task RunConsumerAsync(CancellationToken token)
     {
-
         string streamKey = "mystream";
         string consumerGroup = "mygroup";
         string consumerName = "consumer1";
         
         var consumer = new RedisStreamConsumer(streamKey, consumerGroup, consumerName);
-        try
+        var init =  consumer.InitializeAsync();
+        init.Wait();
+        if (init.IsCompleted)
         {
-            await consumer.InitializeAsync();
-            await consumer.RegisterConsumerAsync(); // Register with active consumers
-            Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
-            var listen= consumer.StartListeningAsync(token,0);
-            var monitor =  consumer.MonitorPendingEntriesAsync(token);
-            var heart =  consumer.UpdateHeartbeatAsync(token);
-            await Task.WhenAll(listen, monitor, heart);
+            var regis = consumer.RegisterConsumerAsync(); // Register with active consumers
+            regis.Wait();
         }
-        catch (OperationCanceledException)
-        {
-            Console.WriteLine("[Consumer] Consumer operation cancelled gracefully.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[Consumer] Error in consumer: {ex.Message}");
-        }
-        finally
-        {
-            await consumer._db.SetRemoveAsync("active-consumers", consumerName);
-            Console.WriteLine($"[Consumer {consumerName}] Stopped.");
-            Console.WriteLine("[Consumer] Stopped.");
-        }
+        Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
+        var listen= consumer.StartListeningAsync(token,1);
+        var monitor = consumer.MonitorPendingEntriesAsync(token);
+        var heart =  consumer.UpdateHeartbeatAsync(token);
+        await Task.WhenAll(listen, heart, monitor);
+
     }
-    
-    
     
     static async Task Main(string[] args)
     {
@@ -261,20 +197,22 @@ class Program
             eventArgs.Cancel = true; 
             cts.Cancel();
         };
-        AppDomain.CurrentDomain.ProcessExit += (s, e) =>
-        {
-            Console.WriteLine("X clicked or process exiting... Cancelling token...");
-            cts.Cancel();
-        };
 
         try
         {
-            var consumerTask = RunConsumerAsync(cts.Token);
-            await consumerTask;        }
+            var consumerTask = Task.Run(() => RunConsumerAsync(cts.Token));
+            await Task.WhenAll(consumerTask);
+        }
         catch (TaskCanceledException)
         {
+
+            string streamKey = "mystream";
+            string consumerGroup = "mygroup";
+            string consumerName = "consumer1";
+            var consumer = new RedisStreamConsumer(streamKey, consumerGroup, consumerName);
+            await consumer._db.SetRemoveAsync("active-consumers", consumerName);
             Console.WriteLine("[Main] Consumer task cancelled.");
-        }      
+        }
         Console.WriteLine("Shutdown Complete.");
     }
 }

@@ -26,9 +26,9 @@ public class RedisConnectionBase
             User = user,
             Password = password,
             AbortOnConnectFail = false,
-            AsyncTimeout = 300000,
-            SyncTimeout = 300000,
-            ConnectTimeout = 300000,
+            AsyncTimeout = 60000,
+            SyncTimeout = 60000,
+            ConnectTimeout = 60000,
         };
 
         _redis = ConnectionMultiplexer.Connect(config);
@@ -38,6 +38,50 @@ public class RedisConnectionBase
         _streamKey = streamKey;
         _consumerGroup = consumerGroup;
         _consumerName = consumerName;
+    }
+    public async Task MonitorPendingEntriesAsync(CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                var activeConsumers = await _db.SetMembersAsync("active-consumers");
+                if (!activeConsumers.Any())
+                {
+                    Console.WriteLine("No other active consumers available for redistribution.");
+                    await Task.Delay(10000, cancellationToken);
+                    continue;
+                }
+
+                var targetConsumer = activeConsumers[new Random().Next(activeConsumers.Length)];
+
+                // Use XAUTOCLAIM to reassign messages to the target consumer
+                var reclaimed = await _db.StreamAutoClaimAsync(
+                    _streamKey, 
+                    _consumerGroup, 
+                    targetConsumer, // Assign to another consumer
+                    60000,         // Idle > 60 seconds 
+                    "0-0",         // Start from beginning
+                    10);           // Limit to 10 messages
+
+                if (!reclaimed.IsNull && reclaimed.ClaimedEntries.Any())
+                {
+                    foreach (var message in reclaimed.ClaimedEntries)
+                    {
+                        Console.WriteLine($"Reassigned message {message.Id} to {targetConsumer}");
+                        // Do NOT process or acknowledge here
+                        // The target consumer will process it 
+                    }
+                }
+
+                await Task.Delay(10000, cancellationToken); // Check every 10 seconds
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in auto-claim monitoring: {ex.Message}");
+                await Task.Delay(5000, cancellationToken);
+            }
+        }
     }
 }
 

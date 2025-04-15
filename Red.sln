@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerWithSubscriber", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consumer2", "Consumer2\Consumer2.csproj", "{D04C86DC-8F28-4881-AAEC-66450B4CBF2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitor", "Monitor\Monitor.csproj", "{D53C1EAB-DFA8-4847-ACBC-75DDC5B76F41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{D04C86DC-8F28-4881-AAEC-66450B4CBF2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D04C86DC-8F28-4881-AAEC-66450B4CBF2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D04C86DC-8F28-4881-AAEC-66450B4CBF2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53C1EAB-DFA8-4847-ACBC-75DDC5B76F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53C1EAB-DFA8-4847-ACBC-75DDC5B76F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53C1EAB-DFA8-4847-ACBC-75DDC5B76F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53C1EAB-DFA8-4847-ACBC-75DDC5B76F41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
