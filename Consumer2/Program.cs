@@ -1,39 +1,57 @@
-﻿using System.Text.Json;
-
-using StackExchange.Redis;
-
-namespace Consumer;
-using BaseRedis;
-
+﻿namespace Consumer;
 class Program
 {
+    private const string StreamKey = "mystream";
+    private const string ConsumerGroup = "mygroup";
+    private const string ConsumerName = "consumer2";
+    private const int ProcessingDelay = 1; 
+    
     static async Task RunConsumerAsync(CancellationToken token)
     {
-        string streamKey = "mystream";
-        string consumerGroup = "mygroup";
-        string consumerName = "consumer2";
-        var consumer = new RedisStreamConsumer(streamKey, consumerGroup, consumerName);
-        await consumer.InitializeAsync();
-        await consumer.RegisterConsumerAsync(); // Register with active consumers
-        Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
-        var listen= consumer.StartListeningAsync(token, 70000);
-        var heart =  consumer.UpdateHeartbeatAsync(token);
-        await Task.WhenAll(listen, heart);
-        Console.WriteLine("[Consumer] Stopped.");
+        var consumer = new RedisStreamConsumer(StreamKey, ConsumerGroup, ConsumerName);
+        try
+        {
+            // Initialize and register consumer
+            await consumer.InitializeAsync();
+            Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
+        
+            // Start all consumer tasks
+            var listenTask = consumer.StartListeningAsync(token, ProcessingDelay);
+            var monitorTask = consumer.MonitorPendingEntriesAsync(token);
+            var heartbeatTask = consumer.UpdateHeartbeatAsync(token);
+        
+            await Task.WhenAll(listenTask, monitorTask, heartbeatTask);
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("[Consumer] Operations cancelled gracefully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Consumer] Error: {ex.Message}");
+            throw;
+        }
     }
     
     static async Task Main(string[] args)
     {
         var cts = new CancellationTokenSource();
+
         Console.CancelKeyPress += (sender, eventArgs) =>
         {
             Console.WriteLine("Ctrl+C pressed! Shutting down...");
-            eventArgs.Cancel = true;
+            eventArgs.Cancel = true; 
             cts.Cancel();
         };
         
-        var consumerTask = Task.Run(() => RunConsumerAsync(cts.Token));
-        await Task.WhenAll(consumerTask);
+        try
+        {
+            await RunConsumerAsync(cts.Token);
+        }
+        catch (TaskCanceledException)
+        {
+            Console.WriteLine("[Main] Consumer task cancelled.");
+        }
         Console.WriteLine("Shutdown Complete.");
     }
 }

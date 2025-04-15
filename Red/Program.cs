@@ -3,24 +3,20 @@ using BaseRedis;
 using StackExchange.Redis;
 
 namespace Red;
-
-
 class Program
 {
+    private const string StreamKey = "mystream";
+    private const string ConsumerGroup = "mygroup";
+    private const int MessageDelay = 1000;
+
     static async Task Main(string[] args)
     {
-
         var cts = new CancellationTokenSource();
-        Console.CancelKeyPress += (sender, eventArgs) =>
-        {
-            Console.WriteLine("Ctrl+C pressed! Shutting down...");
-            eventArgs.Cancel = true; // Prevent abrupt termination
-            cts.Cancel();
-        };
+        SetupShutdownHandlers(cts);
+        
         try
         {
-            var producerTask = RunProducerAsync(cts.Token);
-            await producerTask;
+            await RunProducerAsync(cts.Token);
         }
         catch (OperationCanceledException)
         {
@@ -36,12 +32,20 @@ class Program
         }
     }
 
-    static async Task RunProducerAsync(CancellationToken token)
+    private static void SetupShutdownHandlers(CancellationTokenSource cts)
     {
-        string streamKey = "mystream";
-        string consumerGroup = "mygroup";
-        string consumerName = "consumer1";
-        var producer = new RedisStreamProducer(streamKey);
+        Console.CancelKeyPress += (sender, eventArgs) =>
+        {
+            Console.WriteLine("Ctrl+C pressed! Shutting down...");
+            eventArgs.Cancel = true; // Prevent abrupt termination
+            cts.Cancel();
+        };
+    }
+
+    private static async Task RunProducerAsync(CancellationToken token)
+    {
+        var producer = new RedisStreamProducer(StreamKey);
+        
         try
         {
             while (!token.IsCancellationRequested)
@@ -49,7 +53,7 @@ class Program
                 Console.WriteLine($"[Producer] Sending account update at {DateTime.Now}");
                 var account = AccountGenerator.GenerateRandomAccount();
                 await producer.AddMessageAsync(account);
-                await Task.Delay(1000, token); // Respect cancellation during delay
+                await Task.Delay(MessageDelay, token); 
             }
         }
         catch (OperationCanceledException)
@@ -82,4 +86,3 @@ public class RedisStreamProducer : RedisConnectionBase
         await _db.StreamAddAsync(_streamKey, new[] { entry });
     }
 }
-    

@@ -36,16 +36,3 @@ C:/Users/Work/Something/RedisTest/RedisTest/BaseRedis/obj/Debug/net8.0/ref/BaseR
 /Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/obj/Debug/net8.0/refint/BaseRedis.dll
 /Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/obj/Debug/net8.0/BaseRedis.pdb
 /Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/obj/Debug/net8.0/ref/BaseRedis.dll
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\bin\Debug\net8.0\BaseRedis.deps.json
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\bin\Debug\net8.0\BaseRedis.dll
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\bin\Debug\net8.0\BaseRedis.pdb
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.csproj.AssemblyReference.cache
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.AssemblyInfoInputs.cache
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.AssemblyInfo.cs
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.csproj.CoreCompileInputs.cache
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.sourcelink.json
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.dll
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\refint\BaseRedis.dll
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\BaseRedis.pdb
-C:\Users\Work\Something\RedisTest\RedisTest\BaseRedis\obj\Debug\net8.0\ref\BaseRedis.dll

@@ -4,16 +4,15 @@ namespace Monitor;
 
 class Program
 {
-    static async Task RunMonitorAsync(CancellationToken token)
+    private const string StreamKey = "mystream";
+    private const string ConsumerGroup = "mygroup";
+    private static async Task RunMonitorAsync(CancellationToken token)
     {
-        string streamKey = "mystream";
-        string consumerGroup = "mygroup";
-        var consumer = new RedisConnectionBase(streamKey, consumerGroup, "");
+        var consumer = new RedisConnectionBase(StreamKey, ConsumerGroup, "");
         try
         {
             Console.WriteLine($"[Monitor] Listening for messages at {DateTime.Now}");
-            var monitor =  consumer.MonitorPendingEntriesAsync(token);
-            await Task.WhenAll(monitor);
+            await consumer.MonitorPendingEntriesAsync(token);
         }
         catch (OperationCanceledException)
         {
@@ -25,7 +24,6 @@ class Program
         }
         finally
         {
-
             Console.WriteLine("[Monitor] Stopped.");
         }
     }
@@ -47,14 +45,13 @@ class Program
 
         try
         {
-            var consumerTask = RunMonitorAsync(cts.Token);
-            await Task.WhenAll(consumerTask);
-            
+            await RunMonitorAsync(cts.Token);
         }
         catch (TaskCanceledException)
         {
             Console.WriteLine("[Main] Consumer task cancelled.");
-        }      
+        }
+        
         Console.WriteLine("Shutdown Complete.");
     }
 }

@@ -45,15 +45,15 @@ public class RedisConnectionBase
         {
             try
             {
-                var activeConsumers = await _db.SetMembersAsync("active-consumers");
-                if (!activeConsumers.Any())
+                var activeConsumers = await _db.SortedSetRangeByRankAsync(_consumerGroup, 0, 0, Order.Ascending);
+                if (activeConsumers.Length ==0)
                 {
                     Console.WriteLine("No other active consumers available for redistribution.");
                     await Task.Delay(10000, cancellationToken);
                     continue;
                 }
 
-                var targetConsumer = activeConsumers[new Random().Next(activeConsumers.Length)];
+                var targetConsumer = activeConsumers[0];
 
                 // Use XAUTOCLAIM to reassign messages to the target consumer
                 var reclaimed = await _db.StreamAutoClaimAsync(
@@ -69,11 +69,8 @@ public class RedisConnectionBase
                     foreach (var message in reclaimed.ClaimedEntries)
                     {
                         Console.WriteLine($"Reassigned message {message.Id} to {targetConsumer}");
-                        // Do NOT process or acknowledge here
-                        // The target consumer will process it 
                     }
                 }
-
                 await Task.Delay(10000, cancellationToken); // Check every 10 seconds
             }
             catch (Exception ex)

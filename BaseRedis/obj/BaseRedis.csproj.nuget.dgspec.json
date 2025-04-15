@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj": {}
+    "/Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/BaseRedis.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj": {
+    "/Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/BaseRedis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj",
+        "projectUniqueName": "/Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/BaseRedis.csproj",
         "projectName": "BaseRedis",
-        "projectPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\BaseRedis.csproj",
-        "packagesPath": "C:\\Users\\phat\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Work\\Something\\RedisTest\\RedisTest\\BaseRedis\\obj\\",
+        "projectPath": "/Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/BaseRedis.csproj",
+        "packagesPath": "/Users/phatnguyen/.nuget/packages/",
+        "outputPath": "/Users/phatnguyen/RiderProjects/RedisTest/BaseRedis/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\phat\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/phatnguyen/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -79,7 +67,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
