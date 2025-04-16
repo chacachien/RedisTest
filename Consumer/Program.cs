@@ -8,7 +8,7 @@ public class RedisStreamConsumer: RedisConnectionBase
 {
     private const int HeartbeatInterval = 10000; // milliseconds
     private const int ErrorRetryDelay = 1000; // milliseconds
-    private const int PendingMessageBatchSize = 10;
+    private const int PendingMessageBatchSize = 10; 
     public RedisStreamConsumer( string streamKey, string consumerGroup, string consumerName)
         : base( streamKey, consumerGroup, consumerName)
     {
@@ -62,9 +62,8 @@ public class RedisStreamConsumer: RedisConnectionBase
                 
                 Console.WriteLine(
                     $"ID: {entryId}, Processed {messageType} Account: ID={account.AccountId}, " +
-                    $"Balance={account.Balance}, Equity={account.Equity}, Margin={account.Margin}");
+                    $"Platform={account.Platform}, Balance={account.Balance}, Equity={account.Equity}");
 
-                await Task.Delay(processingDelay, cancellationToken);
                 await _db.StreamAcknowledgeAsync(_streamKey, _consumerGroup, entryId);
             }
         }
@@ -74,8 +73,8 @@ public class RedisStreamConsumer: RedisConnectionBase
         var result = await _db.ExecuteAsync(
             "XREADGROUP",
             "GROUP", _consumerGroup, _consumerName,
-            "COUNT", "1",
-            "BLOCK", 0,
+            "COUNT", "10",
+            "BLOCK", 100000,
             "STREAMS", _streamKey, ">");
 
         if (result.IsNull) return;
@@ -99,9 +98,8 @@ public class RedisStreamConsumer: RedisConnectionBase
                     var account = JsonSerializer.Deserialize<Account>(jsonValue);
                     Console.WriteLine(
                         $"ID: {entryId}, Processed Account: ID={account.AccountId}, " +
-                        $"Balance={account.Balance}, Equity={account.Equity}, Margin={account.Margin}");
+                        $"Platform={account.Platform}, Balance={account.Balance}, Equity={account.Equity}");
                 }
-
                 await Task.Delay(processingDelay, cancellationToken);
                 await _db.StreamAcknowledgeAsync(_streamKey, _consumerGroup, entryId);
             }
@@ -145,7 +143,7 @@ class Program
     private const string StreamKey = "mystream";
     private const string ConsumerGroup = "mygroup";
     private const string ConsumerName = "consumer1";
-    private const int ProcessingDelay = 1; // milliseconds
+    private const int ProcessingDelay = 0; // milliseconds
     
     static async Task RunConsumerAsync(CancellationToken token)
     {
@@ -153,25 +151,20 @@ class Program
     
         try
         {
-            // Initialize and register consumer
             await consumer.InitializeAsync();
-        
-            Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
-        
-            // Start all consumer tasks
+            Console.WriteLine($"[Consumer 1] Listening for messages at {DateTime.Now}");
             var listenTask = consumer.StartListeningAsync(token, ProcessingDelay);
             var monitorTask = consumer.MonitorPendingEntriesAsync(token);
             var heartbeatTask = consumer.UpdateHeartbeatAsync(token);
-        
             await Task.WhenAll(listenTask, monitorTask, heartbeatTask);
         }
         catch (OperationCanceledException)
         {
-            Console.WriteLine("[Consumer] Operations cancelled gracefully.");
+            Console.WriteLine("[Consumer 1] Operations cancelled gracefully.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Consumer] Error: {ex.Message}");
+            Console.WriteLine($"[Consumer 1] Error: {ex.Message}");
             throw;
         }
     }
@@ -186,15 +179,14 @@ class Program
             eventArgs.Cancel = true; 
             cts.Cancel();
         };
-
-
+        
         try
         {
             await RunConsumerAsync(cts.Token);
         }
         catch (TaskCanceledException)
         {
-            Console.WriteLine("[Main] Consumer task cancelled.");
+            Console.WriteLine("[Main] Consumer 1 task cancelled.");
         }
 
         Console.WriteLine("Shutdown Complete.");

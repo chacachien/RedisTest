@@ -4,7 +4,7 @@ class Program
     private const string StreamKey = "mystream";
     private const string ConsumerGroup = "mygroup";
     private const string ConsumerName = "consumer2";
-    private const int ProcessingDelay = 1; 
+    private const int ProcessingDelay = 0;  // simulate a scenario where the consumer gets stuck
     
     static async Task RunConsumerAsync(CancellationToken token)
     {
@@ -13,7 +13,7 @@ class Program
         {
             // Initialize and register consumer
             await consumer.InitializeAsync();
-            Console.WriteLine($"[Consumer] Listening for messages at {DateTime.Now}");
+            Console.WriteLine($"[Consumer 2] Listening for messages at {DateTime.Now}");
         
             // Start all consumer tasks
             var listenTask = consumer.StartListeningAsync(token, ProcessingDelay);
@@ -24,11 +24,11 @@ class Program
         }
         catch (OperationCanceledException)
         {
-            Console.WriteLine("[Consumer] Operations cancelled gracefully.");
+            Console.WriteLine("[Consumer 2] Operations cancelled gracefully.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Consumer] Error: {ex.Message}");
+            Console.WriteLine($"[Consumer 2] Error: {ex.Message}");
             throw;
         }
     }

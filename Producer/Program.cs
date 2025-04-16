@@ -7,7 +7,7 @@ class Program
 {
     private const string StreamKey = "mystream";
     private const string ConsumerGroup = "mygroup";
-    private const int MessageDelay = 1000;
+    private const int MessageDelay = 100;
 
     static async Task Main(string[] args)
     {
@@ -16,7 +16,9 @@ class Program
         
         try
         {
-            await RunProducerAsync(cts.Token);
+            var dx =  RunProducerAsync(cts.Token, "DX");
+            var tl =  RunProducerAsync(cts.Token, "TL");
+            await Task.WhenAll(dx, tl);
         }
         catch (OperationCanceledException)
         {
@@ -42,7 +44,7 @@ class Program
         };
     }
 
-    private static async Task RunProducerAsync(CancellationToken token)
+    private static async Task RunProducerAsync(CancellationToken token, string platform)
     {
         var producer = new RedisStreamProducer(StreamKey);
         
@@ -50,24 +52,24 @@ class Program
         {
             while (!token.IsCancellationRequested)
             {
-                Console.WriteLine($"[Producer] Sending account update at {DateTime.Now}");
-                var account = AccountGenerator.GenerateRandomAccount();
+                Console.WriteLine($"[Producer {platform}] Sending account update at {DateTime.Now}");
+                var account = AccountGenerator.GenerateRandomAccount(platform);
                 await producer.AddMessageAsync(account);
                 await Task.Delay(MessageDelay, token); 
             }
         }
         catch (OperationCanceledException)
         {
-            Console.WriteLine("[Producer] Producer operation cancelled gracefully.");
+            Console.WriteLine("[Producer {platform}] Producer operation cancelled gracefully.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Producer] Error in producer: {ex.Message}");
+            Console.WriteLine($"[Producer {platform}] Error in producer: {ex.Message}");
             throw; 
         }
         finally
         {
-            Console.WriteLine("[Producer] Stopped.");
+            Console.WriteLine($"[Producer {platform}] Stopped.");
         }
     }
 }

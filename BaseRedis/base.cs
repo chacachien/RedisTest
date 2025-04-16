@@ -41,11 +41,12 @@ public class RedisConnectionBase
     }
     public async Task MonitorPendingEntriesAsync(CancellationToken cancellationToken)
     {
+        var nextClaimId = "0-0";
         while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
-                var activeConsumers = await _db.SortedSetRangeByRankAsync(_consumerGroup, 0, 0, Order.Ascending);
+                var activeConsumers = await _db.SortedSetRangeByRankAsync(_consumerGroup, 0, 0, Order.Descending);
                 if (activeConsumers.Length ==0)
                 {
                     Console.WriteLine("No other active consumers available for redistribution.");
@@ -54,15 +55,14 @@ public class RedisConnectionBase
                 }
 
                 var targetConsumer = activeConsumers[0];
-
-                // Use XAUTOCLAIM to reassign messages to the target consumer
+               
                 var reclaimed = await _db.StreamAutoClaimAsync(
                     _streamKey, 
                     _consumerGroup, 
-                    targetConsumer, // Assign to another consumer
-                    60000,         // Idle > 60 seconds 
-                    "0-0",         // Start from beginning
-                    10);           // Limit to 10 messages
+                    targetConsumer, 
+                    30000,    // Idle > 60 seconds 
+                    nextClaimId,         // Start from beginning
+                    10);              // Limit to 10 messages
 
                 if (!reclaimed.IsNull && reclaimed.ClaimedEntries.Any())
                 {
@@ -71,6 +71,8 @@ public class RedisConnectionBase
                         Console.WriteLine($"Reassigned message {message.Id} to {targetConsumer}");
                     }
                 }
+                nextClaimId = reclaimed.NextStartId;
+
                 await Task.Delay(10000, cancellationToken); // Check every 10 seconds
             }
             catch (Exception ex)
@@ -89,24 +91,23 @@ public class Account
     public string AccountId { get; set; } = string.Empty;
     public decimal Balance { get; set; } = decimal.Zero;
     public decimal Equity { get; set; } = decimal.Zero;
-    public decimal Margin { get; set; } = decimal.Zero;
+    public string Platform { get; set; } = string.Empty;
 }
 public static class AccountGenerator
 {
     private static readonly Random _random = new Random();
 
-    public static Account GenerateRandomAccount()
+    public static Account GenerateRandomAccount(string platform)
     {
         var balance = Math.Round((decimal)(_random.NextDouble() * 10000), 2);
         var equity = Math.Round(balance + (decimal)(_random.NextDouble() * 1000 - 500), 2);
-        var margin = Math.Round((decimal)(_random.NextDouble() * 1000), 2);
-
+            
         return new Account
         {
             AccountId = Guid.NewGuid().ToString(),
             Balance = balance,
             Equity = equity,
-            Margin = margin
+            Platform = platform
         };
     }
 
@@ -117,7 +118,6 @@ public static class AccountGenerator
             { "AccountId", account.AccountId },
             { "Balance", account.Balance.ToString("F2") },
             { "Equity", account.Equity.ToString("F2") },
-            { "Margin", account.Margin.ToString("F2") }
         };
     }
 }

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Red", "Red\Red.csproj", "{3157BB61-8203-4288-98CA-9B35937ECE06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Producer", "Producer\Producer.csproj", "{3157BB61-8203-4288-98CA-9B35937ECE06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consumer", "Consumer\Consumer.csproj", "{F74E8FA9-C115-4C46-BD71-B98017059781}"
 EndProject
